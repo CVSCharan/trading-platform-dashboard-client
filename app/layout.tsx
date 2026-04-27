@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google"; // Using Inter/Jetbrains as placeholders for Geist if undefined
 import "./globals.css";
 import { Sidebar } from "@/components/layout/Sidebar";
-import { Header } from "@/components/layout/Header";
+import { TopBar } from "@/components/layout/TopBar";
+import { AppProviders } from "@/components/providers/AppProviders";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -26,18 +27,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark scroll-smooth">
-      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans min-h-screen bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary`}>
-        <div className="relative flex min-h-screen flex-col">
-          <Sidebar />
-          <div className="flex flex-1 flex-col lg:pl-64">
-            <Header />
-            <main className="flex-1 p-4 sm:p-6 lg:p-8">
-              {children}
-            </main>
+      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans min-h-screen bg-page text-text-primary antialiased selection:bg-accent/20 selection:text-accent`}>
+        <AppProviders>
+          <div className="relative flex min-h-screen flex-col">
+            <Sidebar />
+            <div className="flex flex-1 flex-col lg:pl-64">
+              <TopBar />
+              <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-x-hidden">
+                {children}
+              </main>
+            </div>
           </div>
-        </div>
+        </AppProviders>
       </body>
     </html>
   );
 }
+
 
