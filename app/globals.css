@@ -1,82 +1,159 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Geist Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
 
-  /* Custom "Dark Trading Terminal" Palette */
-  --color-page: #0A0E1A;
-  --color-surface: #0D1117;
-  --color-elevated: #161B2E;
-  --color-border: #1E2D4E;
-  --color-accent: #00D4FF;
-  --color-profit: #00FF9F;
-  --color-loss: #FF6B6B;
-  --color-warning: #FFB347;
-  --color-purple: #7C4DFF;
+  /* Color System */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
   
-  --color-text-primary: #E8F4FD;
-  --color-text-secondary: #B8C5D6;
-  --color-text-muted: #5A7A9A;
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
 
-  /* Map to standard shadcn tokens for broader compatibility */
-  --color-background: var(--color-page);
-  --color-foreground: var(--color-text-primary);
-  
-  --color-card: var(--color-surface);
-  --color-card-foreground: var(--color-text-primary);
-  
-  --color-popover: var(--color-elevated);
-  --color-popover-foreground: var(--color-text-primary);
-  
-  --color-primary: var(--color-accent);
-  --color-primary-foreground: #000000;
-  
-  --color-secondary: var(--color-elevated);
-  --color-secondary-foreground: var(--color-text-secondary);
-  
-  --color-muted: var(--color-elevated);
-  --color-muted-foreground: var(--color-text-muted);
-  
-  --color-destructive: var(--color-loss);
-  --color-destructive-foreground: #ffffff;
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
 
-  --color-input: var(--color-border);
-  --color-ring: var(--color-accent);
+  /* Semantic Trading Colors */
+  --color-profit: var(--profit);
+  --color-loss: var(--loss);
+  --color-warning: var(--warning);
   
-  --radius-lg: 0.5rem;
-  --radius-md: calc(0.5rem - 2px);
-  --radius-sm: calc(0.5rem - 4px);
+  /* Layout specific mapping */
+  --color-page: var(--background);
+  --color-surface: var(--card);
+  --color-elevated: var(--muted);
+  --color-text-primary: var(--foreground);
+  --color-text-secondary: var(--secondary-foreground);
+  --color-text-muted: var(--muted-foreground);
+}
+
+@layer base {
+  :root {
+    /* Professional Light Palette - Slate & Indigo */
+    --background: #f8fafc; /* Slate 50 */
+    --foreground: #0f172a; /* Slate 900 */
+    
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+    
+    --popover: #ffffff;
+    --popover-foreground: #0f172a;
+    
+    --primary: #4f46e5; /* Indigo 600 */
+    --primary-foreground: #ffffff;
+    
+    --secondary: #f1f5f9; /* Slate 100 */
+    --secondary-foreground: #475569; /* Slate 600 */
+    
+    --muted: #f1f5f9; /* Slate 100 */
+    --muted-foreground: #64748b; /* Slate 500 */
+    
+    --accent: #eff6ff; /* Blue 50 */
+    --accent-foreground: #1e40af; /* Blue 800 */
+    
+    --destructive: #e11d48; /* Rose 600 */
+    --destructive-foreground: #ffffff;
+    
+    --border: #e2e8f0; /* Slate 200 */
+    --input: #e2e8f0;
+    --ring: #6366f1; /* Indigo 500 */
+    
+    --profit: #10b981; /* Emerald 500 */
+    --loss: #ef4444; /* Red 500 */
+    --warning: #f59e0b; /* Amber 500 */
+    
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Professional Dark Palette - Deep Slate */
+    --background: #020617; /* Slate 950 */
+    --foreground: #f8fafc; /* Slate 50 */
+    
+    --card: #0f172a; /* Slate 900 */
+    --card-foreground: #f8fafc;
+    
+    --popover: #0f172a;
+    --popover-foreground: #f8fafc;
+    
+    --primary: #6366f1; /* Indigo 500 */
+    --primary-foreground: #ffffff;
+    
+    --secondary: #1e293b; /* Slate 800 */
+    --secondary-foreground: #94a3b8; /* Slate 400 */
+    
+    --muted: #1e293b; /* Slate 800 */
+    --muted-foreground: #64748b; /* Slate 500 */
+    
+    --accent: #1e293b; /* Slate 800 */
+    --accent-foreground: #f8fafc; /* Slate 50 */
+    
+    --destructive: #9f1239; /* Rose 800 */
+    --destructive-foreground: #ffffff;
+    
+    --border: #1e293b; /* Slate 800 */
+    --input: #1e293b;
+    --ring: #818cf8; /* Indigo 400 */
+    
+    --profit: #10b981;
+    --loss: #f43f5e;
+    --warning: #fbbf24;
+  }
 }
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border outline-ring/50 transition-colors duration-200;
   }
   
   body {
-    @apply bg-page text-text-primary font-sans;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "cv02", "cv03", "cv04", "ss01"; /* Professional Inter features */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Improved Typography for Trading */
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight font-semibold;
+  }
+
+  .font-mono {
+    font-feature-settings: "tnum" 1, "lnum" 1; /* Tabular numbers for trading data */
   }
 }
 
-/* Base utility overrides specifically to ban white backgrounds */
-.bg-white {
-  background-color: var(--color-page) !important;
-}
-
-/* Custom scrollbar for terminal */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-page);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-border);
-  border-radius: 4px;
+  @apply bg-muted-foreground/20 rounded-full transition-colors;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-text-muted);
+  @apply bg-muted-foreground/40;
 }

@@ -4,10 +4,26 @@ import {
   EquityPoint, 
   KpiSummary, 
   HeatmapCell, 
-  Filters 
+  Filters,
+  InstrumentPerformance,
+  RegimePerformance
 } from "@/types/trading";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+
+interface ApiResponse<T> {
+  success: boolean;
+  data: T;
+  meta?: {
+    page?: number;
+    pageSize?: number;
+    total?: number;
+  };
+  error?: {
+    code: string;
+    message: string;
+  };
+}
 
 function buildUrl(endpoint: string, filters?: Filters, params?: Record<string, string | number>) {
   const url = new URL(`${API_BASE}${endpoint}`);
@@ -31,22 +47,32 @@ function buildUrl(endpoint: string, filters?: Filters, params?: Record<string, s
   return url.toString();
 }
 
-async function fetcher<T>(url: string): Promise<T> {
-  const res = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json"
+async function fetcher<T>(url: string): Promise<ApiResponse<T>> {
+  console.log(`[API Request] Fetching: ${url}`);
+  try {
+    const res = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    const json = await res.json();
+    console.log(`[API Response] ${url}:`, json);
+
+    if (!res.ok || json.success === false) {
+      throw new Error(json.error?.message || `API Error: ${res.status} - ${res.statusText}`);
     }
-  });
 
-  if (!res.ok) {
-    throw new Error(`API Error: ${res.status} - ${res.statusText}`);
+    return json;
+  } catch (error) {
+    console.error(`[API Error] ${url}:`, error);
+    throw error;
   }
-
-  return res.json();
 }
 
 export const fetchKpiSummary = async (filters: Filters): Promise<KpiSummary> => {
-  return fetcher<KpiSummary>(buildUrl("/v1/kpi", filters));
+  const response = await fetcher<KpiSummary>(buildUrl("/analytics/kpi", filters));
+  return response.data;
 };
 
 export const fetchTradeCycles = async (
@@ -55,40 +81,56 @@ export const fetchTradeCycles = async (
   pageSize: number = 25,
   sort?: string
 ): Promise<{ data: TradeCycle[], total: number }> => {
-  return fetcher(buildUrl("/v1/trades", filters, { page, pageSize, ...(sort && { sort }) }));
+  const response = await fetcher<TradeCycle[]>(buildUrl("/trades", filters, { page, pageSize, ...(sort && { sort }) }));
+  return {
+    data: response.data,
+    total: response.meta?.total || response.data.length
+  };
 };
 
 export const fetchEquityCurve = async (
-  login: string,
+  accountId?: string,
   dateFrom?: string,
   dateTo?: string
 ): Promise<EquityPoint[]> => {
-  return fetcher<EquityPoint[]>(buildUrl("/v1/equity", { login, dateFrom, dateTo }));
+  const response = await fetcher<EquityPoint[]>(buildUrl("/analytics/equity-curve", { accountId, dateFrom, dateTo }));
+  return response.data;
 };
 
 export const fetchHeatmapData = async (
-  login: string,
-  metric: "winRate" | "netProfit" | "tradeCount"
+  accountId?: string,
+  metric: "winRate" | "netProfit" | "tradeCount" = "tradeCount"
 ): Promise<HeatmapCell[]> => {
-  return fetcher<HeatmapCell[]>(buildUrl("/v1/heatmap", { login }, { metric }));
+  const response = await fetcher<HeatmapCell[]>(buildUrl("/analytics/heatmap", { accountId }, { metric }));
+  return response.data;
 };
 
-export const fetchBehaviorStats = async (login: string): Promise<any> => {
-  return fetcher(buildUrl("/v1/behavior", { login }));
+export const fetchBehaviorStats = async (accountId?: string): Promise<any> => {
+  const response = await fetcher(buildUrl("/analytics/behavior", { accountId }));
+  return response.data;
 };
 
-export const fetchRiskProfile = async (login: string): Promise<any> => {
-  return fetcher(buildUrl("/v1/risk", { login }));
+export const fetchRiskProfile = async (accountId?: string): Promise<any> => {
+  const response = await fetcher(buildUrl("/analytics/risk", { accountId }));
+  return response.data;
 };
 
-export const fetchInstrumentBreakdown = async (login: string): Promise<any> => {
-  return fetcher(buildUrl("/v1/instruments", { login }));
+export const fetchInstrumentPerformance = async (filters: Filters): Promise<InstrumentPerformance[]> => {
+  const response = await fetcher<InstrumentPerformance[]>(buildUrl("/analytics/instruments", filters));
+  return response.data;
 };
 
-export const fetchRegimePerformance = async (login: string): Promise<any> => {
-  return fetcher(buildUrl("/v1/regimes", { login }));
+export const fetchRegimePerformance = async (filters: Filters): Promise<RegimePerformance[]> => {
+  const response = await fetcher<RegimePerformance[]>(buildUrl("/analytics/regimes", filters));
+  return response.data;
+};
+
+export const fetchInsights = async (filters: Filters): Promise<Insight[]> => {
+  const response = await fetcher<Insight[]>(buildUrl("/analytics/insights", filters));
+  return response.data;
 };
 
 export const fetchAccounts = async (): Promise<AccountSummary[]> => {
-  return fetcher<AccountSummary[]>(`${API_BASE}/v1/accounts`);
+  const response = await fetcher<AccountSummary[]>(`${API_BASE}/accounts`);
+  return response.data;
 };

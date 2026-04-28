@@ -16,8 +16,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AntigravityTrade | Professional Trading Dashboard",
-  description: "Next-generation trading platform for professional traders.",
+  title: "MoneyPlantFx | Professional Trading Dashboard",
+  description: "Next-generation trading analytics and behavioral tracking for professional traders.",
 };
 
 export default function RootLayout({
@@ -26,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark scroll-smooth">
+    <html lang="en" className="scroll-smooth">
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans min-h-screen bg-page text-text-primary antialiased selection:bg-accent/20 selection:text-accent`}>
         <AppProviders>
           <div className="relative flex min-h-screen flex-col">

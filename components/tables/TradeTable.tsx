@@ -89,7 +89,6 @@ export function TradeTable({ columns, data }: DataTableProps) {
           size="sm"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
-          className="bg-elevated border-border text-text-secondary"
         >
           Previous
         </Button>
@@ -98,7 +97,6 @@ export function TradeTable({ columns, data }: DataTableProps) {
           size="sm"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
-          className="bg-elevated border-border text-text-secondary"
         >
           Next
         </Button>
@@ -112,24 +110,31 @@ export const tradeColumns: ColumnDef<TradeCycle>[] = [
     accessorKey: "timeEntry",
     header: "Date",
     cell: ({ row }) => {
-      // Basic formatting, assuming ISO string. Normally use date-fns here.
       const date = new Date(row.getValue("timeEntry"));
-      return <span className="font-mono text-xs">{date.toLocaleDateString()} {date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>;
+      return (
+        <div className="flex flex-col">
+          <span className="font-mono text-xs font-medium text-text-primary">{date.toLocaleDateString()}</span>
+          <span className="font-mono text-[10px] text-text-muted">{date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+        </div>
+      );
     },
   },
   {
     accessorKey: "symbol",
     header: "Symbol",
-    cell: ({ row }) => <span className="font-bold text-text-primary">{row.getValue("symbol")}</span>,
+    cell: ({ row }) => <span className="font-bold text-text-primary tracking-tight">{row.getValue("symbol")}</span>,
   },
   {
     accessorKey: "direction",
     header: "Direction",
     cell: ({ row }) => {
       const dir = row.getValue("direction") as string;
-      const isBuy = dir === "BUY";
+      const isBuy = dir === "long" || dir === "BUY";
       return (
-        <span className={`flex items-center gap-1 text-xs font-semibold ${isBuy ? "text-profit" : "text-loss"}`}>
+        <span className={cn(
+          "inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider",
+          isBuy ? "bg-profit/10 text-profit border border-profit/20" : "bg-loss/10 text-loss border border-loss/20"
+        )}>
           {isBuy ? <ArrowUpIcon className="h-3 w-3" /> : <ArrowDownIcon className="h-3 w-3" />}
           {dir}
         </span>
@@ -140,7 +145,7 @@ export const tradeColumns: ColumnDef<TradeCycle>[] = [
     accessorKey: "tradeStyle",
     header: "Style",
     cell: ({ row }) => (
-      <span className="bg-purple/20 text-purple border border-purple/30 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase">
+      <span className="bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">
         {row.getValue("tradeStyle")}
       </span>
     ),

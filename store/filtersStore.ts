@@ -20,7 +20,7 @@ export const useFiltersStore = create<FiltersState>((set) => ({
     })),
   resetFilters: () => 
     set((state) => ({ 
-      filters: { login: state.filters.login } // Keep login when resetting
+      filters: { accountId: state.filters.accountId } // Keep accountId when resetting
     })),
   setActiveAccount: (account) => 
     set({ activeAccount: account }),

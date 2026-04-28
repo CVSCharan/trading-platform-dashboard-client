@@ -1,6 +1,6 @@
-# AntigravityTrade - Developer Guide
+# MoneyPlantFx - Developer Guide
 
-Welcome to the AntigravityTrade frontend codebase! This guide is designed to give you a clear, comprehensive understanding of how the Next.js 15 application is structured, how data flows through it, and how to contribute without breaking established standards.
+Welcome to the MoneyPlantFx frontend codebase! This guide is designed to give you a clear, comprehensive understanding of how the Next.js 15 application is structured, how data flows through it, and how to contribute without breaking established standards.
 
 ---
 
